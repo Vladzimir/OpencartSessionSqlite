@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Fix session cookie</name>
+    <code>fix_session_cookie</code>
+    <version>0.1</version>
+    <author>Vladzimir</author>
+    <link></link>
+    <file path="system/library/session.php">
+        <operation>
+            <search><![CDATA[session_set_cookie_params(0, '/');]]></search>
+            <add position="replace"><![CDATA[
+			//session_set_cookie_params(0, '/');
+]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[session_start();]]></search>
+            <add position="after"><![CDATA[
+            $lifetime = ini_get('session.gc_maxlifetime');
+            setcookie(session_name(),session_id(),time()+$lifetime,'/');
+]]></add>
+        </operation>
+    </file>
+</modification>
